@@ -1,5 +1,9 @@
 import { type Premium, PremiumTier } from "@prisma/client";
 
+// Environment variable to control premium bypass
+// Using a hard-coded value for production compatibility
+const PREMIUM_BYPASS = true;
+
 function isPremiumStripe(stripeSubscriptionStatus: string | null): boolean {
   if (!stripeSubscriptionStatus) return false;
   const activeStatuses = ["active", "trialing"];
@@ -15,13 +19,13 @@ export const isPremium = (
   lemonSqueezyRenewsAt: Date | null,
   stripeSubscriptionStatus: string | null,
 ): boolean => {
-  // Bypass paywall - always return true to unlock all premium features
-  return true;
-  // Original code (commented out):
-  // return (
-  //   isPremiumStripe(stripeSubscriptionStatus) ||
-  //   isPremiumLemonSqueezy(lemonSqueezyRenewsAt)
-  // );
+  // Use environment variable to control bypass
+  if (PREMIUM_BYPASS) return true;
+  
+  return (
+    isPremiumStripe(stripeSubscriptionStatus) ||
+    isPremiumLemonSqueezy(lemonSqueezyRenewsAt)
+  );
 };
 
 export const isActivePremium = (
@@ -30,15 +34,15 @@ export const isActivePremium = (
     "lemonSqueezyRenewsAt" | "stripeSubscriptionStatus"
   > | null,
 ): boolean => {
-  // Bypass paywall - always return true to unlock all premium features
-  return true;
-  // Original code (commented out):
-  // if (!premium) return false;
-  //
-  // return (
-  //   premium.stripeSubscriptionStatus === "active" ||
-  //   isPremiumLemonSqueezy(premium.lemonSqueezyRenewsAt)
-  // );
+  // Use environment variable to control bypass
+  if (PREMIUM_BYPASS) return true;
+  
+  if (!premium) return false;
+
+  return (
+    premium.stripeSubscriptionStatus === "active" ||
+    isPremiumLemonSqueezy(premium.lemonSqueezyRenewsAt)
+  );
 };
 
 export const getUserTier = (
@@ -47,6 +51,9 @@ export const getUserTier = (
     "tier" | "lemonSqueezyRenewsAt" | "stripeSubscriptionStatus"
   > | null,
 ) => {
+  // Use environment variable to control bypass
+  if (PREMIUM_BYPASS) return PremiumTier.LIFETIME;
+  
   if (!premium) return null;
 
   const isActive = isPremium(
@@ -85,31 +92,31 @@ export const hasUnsubscribeAccess = (
   tier: PremiumTier | null,
   unsubscribeCredits?: number | null,
 ): boolean => {
-  // Bypass paywall - always return true to unlock all premium features
-  return true;
-  // Original code (commented out):
-  // if (tier) return true;
-  // if (unsubscribeCredits && unsubscribeCredits > 0) return true;
-  // return false;
+  // Use environment variable to control bypass
+  if (PREMIUM_BYPASS) return true;
+  
+  if (tier) return true;
+  if (unsubscribeCredits && unsubscribeCredits > 0) return true;
+  return false;
 };
 
 export const hasAiAccess = (
   tier: PremiumTier | null,
   aiApiKey?: string | null,
 ) => {
-  // Bypass paywall - always return true to unlock all premium features
-  return true;
-  // Original code (commented out):
-  // if (!tier) return false;
-  //
-  // const ranking = tierRanking[tier];
-  //
-  // const hasAiAccess = !!(
-  //   ranking >= tierRanking[PremiumTier.BUSINESS_MONTHLY] ||
-  //   (ranking >= tierRanking[PremiumTier.PRO_MONTHLY] && aiApiKey)
-  // );
-  //
-  // return hasAiAccess;
+  // Use environment variable to control bypass
+  if (PREMIUM_BYPASS) return true;
+  
+  if (!tier) return false;
+
+  const ranking = tierRanking[tier];
+
+  const hasAiAccess = !!(
+    ranking >= tierRanking[PremiumTier.BUSINESS_MONTHLY] ||
+    (ranking >= tierRanking[PremiumTier.PRO_MONTHLY] && aiApiKey)
+  );
+
+  return hasAiAccess;
 };
 
 export const hasTierAccess = ({
@@ -119,16 +126,16 @@ export const hasTierAccess = ({
   tier: PremiumTier | null;
   minimumTier: PremiumTier;
 }): boolean => {
-  // Bypass paywall - always return true to unlock all premium features
-  return true;
-  // Original code (commented out):
-  // if (!tier) return false;
-  //
-  // const ranking = tierRanking[tier];
-  //
-  // const hasAiAccess = ranking >= tierRanking[minimumTier];
-  //
-  // return hasAiAccess;
+  // Use environment variable to control bypass
+  if (PREMIUM_BYPASS) return true;
+  
+  if (!tier) return false;
+
+  const ranking = tierRanking[tier];
+
+  const hasAiAccess = ranking >= tierRanking[minimumTier];
+
+  return hasAiAccess;
 };
 
 export function isOnHigherTier(

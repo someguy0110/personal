@@ -145,17 +145,21 @@ export function PremiumExpiredCardContent({
 }
 
 export function PremiumExpiredCard() {
-  const [dismissed, setDismissed] = useState(false);
-  const { data: user, isLoading } = useUser();
-
-  if (isLoading || dismissed || !user) return null;
-
-  return (
-    <div className="px-3 pt-4">
-      <PremiumExpiredCardContent
-        premium={user.premium}
-        onDismiss={() => setDismissed(true)}
-      />
-    </div>
-  );
+  // PremiumExpiredCard hidden since all premium features are unlocked
+  return null;
+  
+  // Original code (commented out):
+  // const [dismissed, setDismissed] = useState(false);
+  // const { data: user, isLoading } = useUser();
+  //
+  // if (isLoading || dismissed || !user) return null;
+  //
+  // return (
+  //   <div className="px-3 pt-4">
+  //     <PremiumExpiredCardContent
+  //       premium={user.premium}
+  //       onDismiss={() => setDismissed(true)}
+  //     />
+  //   </div>
+  // );
 }

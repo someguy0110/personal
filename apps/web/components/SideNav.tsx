@@ -247,12 +247,13 @@ export function SideNav({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </Link>
         </SidebarMenuButton>
 
-        <SidebarMenuButton asChild>
+        {/* Premium button hidden since all features are unlocked */}
+        {/* <SidebarMenuButton asChild>
           <Link href="/premium">
             <CrownIcon className="size-4" />
             <span className="font-semibold">Premium</span>
           </Link>
-        </SidebarMenuButton>
+        </SidebarMenuButton> */}
 
         <SidebarMenuButton asChild>
           <Link href={prefixPath(currentEmailAccountId, "/settings")}>

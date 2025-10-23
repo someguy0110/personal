@@ -146,6 +146,9 @@ export async function updateAccountSeatsForPremium(
   }
 }
 
+// Hard-coded bypass for production compatibility
+const SERVER_BYPASS = true;
+
 export async function checkHasAccess({
   userId,
   minimumTier,
@@ -153,35 +156,36 @@ export async function checkHasAccess({
   userId: string;
   minimumTier: PremiumTier;
 }): Promise<boolean> {
-  // Bypass paywall - always return true to unlock all premium features
-  return true;
-  // Original code (commented out):
-  // const user = await prisma.user.findUnique({
-  //   where: { id: userId },
-  //   select: {
-  //     premium: {
-  //       select: {
-  //         tier: true,
-  //         stripeSubscriptionStatus: true,
-  //         lemonSqueezyRenewsAt: true,
-  //       },
-  //     },
-  //   },
-  // });
-  //
-  // if (!user) throw new SafeError("User not found");
-  //
-  // if (
-  //   !isPremium(
-  //     user?.premium?.lemonSqueezyRenewsAt || null,
-  //     user?.premium?.stripeSubscriptionStatus || null,
-  //   )
-  // ) {
-  //   return false;
-  // }
-  //
-  // return hasTierAccess({
-  //   tier: user.premium?.tier || null,
-  //   minimumTier,
-  // });
+  // Use hard-coded bypass for production compatibility
+  if (SERVER_BYPASS) return true;
+  
+  // Original code:
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      premium: {
+        select: {
+          tier: true,
+          stripeSubscriptionStatus: true,
+          lemonSqueezyRenewsAt: true,
+        },
+      },
+    },
+  });
+
+  if (!user) throw new SafeError("User not found");
+
+  if (
+    !isPremium(
+      user?.premium?.lemonSqueezyRenewsAt || null,
+      user?.premium?.stripeSubscriptionStatus || null,
+    )
+  ) {
+    return false;
+  }
+
+  return hasTierAccess({
+    tier: user.premium?.tier || null,
+    minimumTier,
+  });
 }
