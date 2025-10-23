@@ -153,32 +153,35 @@ export async function checkHasAccess({
   userId: string;
   minimumTier: PremiumTier;
 }): Promise<boolean> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      premium: {
-        select: {
-          tier: true,
-          stripeSubscriptionStatus: true,
-          lemonSqueezyRenewsAt: true,
-        },
-      },
-    },
-  });
-
-  if (!user) throw new SafeError("User not found");
-
-  if (
-    !isPremium(
-      user?.premium?.lemonSqueezyRenewsAt || null,
-      user?.premium?.stripeSubscriptionStatus || null,
-    )
-  ) {
-    return false;
-  }
-
-  return hasTierAccess({
-    tier: user.premium?.tier || null,
-    minimumTier,
-  });
+  // Bypass paywall - always return true to unlock all premium features
+  return true;
+  // Original code (commented out):
+  // const user = await prisma.user.findUnique({
+  //   where: { id: userId },
+  //   select: {
+  //     premium: {
+  //       select: {
+  //         tier: true,
+  //         stripeSubscriptionStatus: true,
+  //         lemonSqueezyRenewsAt: true,
+  //       },
+  //     },
+  //   },
+  // });
+  //
+  // if (!user) throw new SafeError("User not found");
+  //
+  // if (
+  //   !isPremium(
+  //     user?.premium?.lemonSqueezyRenewsAt || null,
+  //     user?.premium?.stripeSubscriptionStatus || null,
+  //   )
+  // ) {
+  //   return false;
+  // }
+  //
+  // return hasTierAccess({
+  //   tier: user.premium?.tier || null,
+  //   minimumTier,
+  // });
 }

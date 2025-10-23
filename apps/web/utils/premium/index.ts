@@ -15,10 +15,13 @@ export const isPremium = (
   lemonSqueezyRenewsAt: Date | null,
   stripeSubscriptionStatus: string | null,
 ): boolean => {
-  return (
-    isPremiumStripe(stripeSubscriptionStatus) ||
-    isPremiumLemonSqueezy(lemonSqueezyRenewsAt)
-  );
+  // Bypass paywall - always return true to unlock all premium features
+  return true;
+  // Original code (commented out):
+  // return (
+  //   isPremiumStripe(stripeSubscriptionStatus) ||
+  //   isPremiumLemonSqueezy(lemonSqueezyRenewsAt)
+  // );
 };
 
 export const isActivePremium = (
@@ -27,12 +30,15 @@ export const isActivePremium = (
     "lemonSqueezyRenewsAt" | "stripeSubscriptionStatus"
   > | null,
 ): boolean => {
-  if (!premium) return false;
-
-  return (
-    premium.stripeSubscriptionStatus === "active" ||
-    isPremiumLemonSqueezy(premium.lemonSqueezyRenewsAt)
-  );
+  // Bypass paywall - always return true to unlock all premium features
+  return true;
+  // Original code (commented out):
+  // if (!premium) return false;
+  //
+  // return (
+  //   premium.stripeSubscriptionStatus === "active" ||
+  //   isPremiumLemonSqueezy(premium.lemonSqueezyRenewsAt)
+  // );
 };
 
 export const getUserTier = (
@@ -79,25 +85,31 @@ export const hasUnsubscribeAccess = (
   tier: PremiumTier | null,
   unsubscribeCredits?: number | null,
 ): boolean => {
-  if (tier) return true;
-  if (unsubscribeCredits && unsubscribeCredits > 0) return true;
-  return false;
+  // Bypass paywall - always return true to unlock all premium features
+  return true;
+  // Original code (commented out):
+  // if (tier) return true;
+  // if (unsubscribeCredits && unsubscribeCredits > 0) return true;
+  // return false;
 };
 
 export const hasAiAccess = (
   tier: PremiumTier | null,
   aiApiKey?: string | null,
 ) => {
-  if (!tier) return false;
-
-  const ranking = tierRanking[tier];
-
-  const hasAiAccess = !!(
-    ranking >= tierRanking[PremiumTier.BUSINESS_MONTHLY] ||
-    (ranking >= tierRanking[PremiumTier.PRO_MONTHLY] && aiApiKey)
-  );
-
-  return hasAiAccess;
+  // Bypass paywall - always return true to unlock all premium features
+  return true;
+  // Original code (commented out):
+  // if (!tier) return false;
+  //
+  // const ranking = tierRanking[tier];
+  //
+  // const hasAiAccess = !!(
+  //   ranking >= tierRanking[PremiumTier.BUSINESS_MONTHLY] ||
+  //   (ranking >= tierRanking[PremiumTier.PRO_MONTHLY] && aiApiKey)
+  // );
+  //
+  // return hasAiAccess;
 };
 
 export const hasTierAccess = ({
@@ -107,13 +119,16 @@ export const hasTierAccess = ({
   tier: PremiumTier | null;
   minimumTier: PremiumTier;
 }): boolean => {
-  if (!tier) return false;
-
-  const ranking = tierRanking[tier];
-
-  const hasAiAccess = ranking >= tierRanking[minimumTier];
-
-  return hasAiAccess;
+  // Bypass paywall - always return true to unlock all premium features
+  return true;
+  // Original code (commented out):
+  // if (!tier) return false;
+  //
+  // const ranking = tierRanking[tier];
+  //
+  // const hasAiAccess = ranking >= tierRanking[minimumTier];
+  //
+  // return hasAiAccess;
 };
 
 export function isOnHigherTier(
