@@ -318,10 +318,11 @@ if (env.MICROSOFT_CLIENT_ID && !env.MICROSOFT_WEBHOOK_CLIENT_STATE) {
   );
 }
 
+// Disable Serwist in production to prevent build hanging issue
 const withSerwist = withSerwistInit({
   swSrc: "app/sw.ts",
   swDest: "public/sw.js",
-  disable: env.NODE_ENV !== "production",
+  disable: true, // Always disable to prevent build hanging
   maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
 });
 

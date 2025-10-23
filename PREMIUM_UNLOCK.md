@@ -108,6 +108,13 @@ OPENAI_API_KEY=your-openai-key
 ANTHROPIC_API_KEY=your-anthropic-key
 ```
 
+## Production Build Fix
+
+To fix the issue with Next.js 15.5.6 hanging during production builds:
+
+✅ **Disabled Serwist** - Service worker bundling has been disabled to prevent build hanging
+✅ **Optimized Build Process** - The build should now complete successfully without hanging
+
 ## Notes
 
 - These modifications are for development/testing purposes only
@@ -115,6 +122,7 @@ ANTHROPIC_API_KEY=your-anthropic-key
 - If you want to revert changes, simply restore the original functions
 - The admin panel at `/admin` will be accessible to any user
 - All API endpoints that check for premium access will now allow access
+- Service worker functionality is disabled (offline capabilities won't work)
 
 ## Troubleshooting
 
